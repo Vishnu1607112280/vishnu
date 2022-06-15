@@ -3,7 +3,9 @@ package com.zensar.ide.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,40 +16,60 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zensar.ide.CouponService;
+import com.zensar.springbootdemoCouponDto.CouponDto;
 import com.zensar.ide.entity.Coupon;
 
 @RestController
-@RequestMapping("/coupon-api")
+@RequestMapping(value = "/coupon-api", produces = { MediaType.APPLICATION_JSON_VALUE,
+		MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE,
+				MediaType.APPLICATION_XML_VALUE })
 public class CouponController {
 	@Autowired
 	private CouponService couponService;
 
-	@GetMapping(value = "/coupon/{couponId}", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
-	public Coupon getCoupon(@PathVariable("coupon") int CouponId) {
-		return couponService.getCoupon(CouponId);
+//	@GetMapping(value = "/coupon/{couponId}",produces = { MediaType.APPLICATION_JSON_VALUE,
+//			MediaType.APPLICATION_XML_VALUE })
+	@GetMapping(value = "/coupon/{couponId}")
+	// public CouponDto getCoupon(@PathVariable("couponId") int CouponId) {
+	public ResponseEntity<CouponDto> getCoupon(@PathVariable("couponId") int CouponId) {
+		// return couponService.getCoupon(CouponId);
+		return new ResponseEntity<CouponDto>(couponService.getCoupon(CouponId), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/coupons", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	public List<Coupon> getCoupons() {
-		return couponService.getCoupons();
+//	@GetMapping(value = "/coupons",produces = { MediaType.APPLICATION_JSON_VALUE,
+//			MediaType.APPLICATION_XML_VALUE })
+	@GetMapping(value = "/coupons")
+	// public List<CouponDto> getCoupons() {
+	public ResponseEntity<List<CouponDto>> getCoupons() {
+		// return couponService.getCoupons();
+		return new ResponseEntity<List<CouponDto>>(couponService.getCoupons(), HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/coupons", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	public void insertCoupon(@RequestBody Coupon coupon) {
-		couponService.insertCoupon(coupon);
-
+//	@PostMapping(value = "/coupons",consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@PostMapping(value = "/coupons")
+	// public CouponDto insertCoupon(@RequestBody CouponDto couponDto) {
+	public ResponseEntity<CouponDto> insertCoupon(@RequestBody CouponDto couponDto) {
+		// return couponService.insertCoupon(couponDto);
+		return new ResponseEntity<CouponDto>(couponService.insertCoupon(couponDto), HttpStatus.CREATED);
 	}
 
-	@PutMapping(value = "coupons/{couponId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
-	public void updateCoupon(@PathVariable("couponId") int CouponId, @RequestBody Coupon coupon) {
-		couponService.updateCoupon(CouponId, coupon);
+//	@PutMapping(value = "coupons/{couponId}",consumes = { MediaType.APPLICATION_JSON_VALUE,
+//			MediaType.APPLICATION_XML_VALUE })
+	@PutMapping(value = "coupons/{couponId}")
+	// public void updateCoupon(@PathVariable("couponId") int CouponId, @RequestBody
+	// CouponDto couponDto) {
+	public ResponseEntity<String> updateCoupon(@PathVariable("couponId") int CouponId,
+			@RequestBody CouponDto couponDto) {
+		couponService.updateCoupon(CouponId, couponDto);
+		return new ResponseEntity<String>("Coupon updated Succesfully", HttpStatus.OK);
 
 	}
 
 	@DeleteMapping("coupons/{couponId}")
-	public void deleteCoupon(@PathVariable("couponId") int CouponId) {
+	// public void deleteCoupon(@PathVariable("couponId") int CouponId) {
+	public ResponseEntity<String> deleteCoupon(@PathVariable("couponId") int CouponId) {
 		couponService.deleteCoupon(CouponId);
+		return new ResponseEntity<String>("Coupon deleted Succesfully", HttpStatus.OK);
 	}
+
 }
