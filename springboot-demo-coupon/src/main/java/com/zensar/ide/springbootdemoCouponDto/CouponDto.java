@@ -1,49 +1,69 @@
 package com.zensar.springbootdemoCouponDto;
 
 public class CouponDto {
-	private int CouponId;
-	private String Couponcode;
-	private String CouponExpdate;
+	private int couponId;
+	private String couponCode;
+	private String expDate;
+	private int couponPrice;
+	private String couponDesc;
 
 	public CouponDto() {
 		super();
 	}
 
-	public CouponDto(int couponId, String couponcode, String couponExpdate) {
+	public CouponDto(int couponId, String couponCode, String expDate, int couponPrice, String couponDesc) {
 		super();
-		CouponId = couponId;
-		Couponcode = couponcode;
-		CouponExpdate = couponExpdate;
+		this.couponId = couponId;
+		this.couponCode = couponCode;
+		this.expDate = expDate;
+		this.couponPrice = couponPrice;
+		this.couponDesc = couponDesc;
 	}
 
 	public int getCouponId() {
-		return CouponId;
+		return couponId;
 	}
 
 	public void setCouponId(int couponId) {
-		CouponId = couponId;
+		this.couponId = couponId;
 	}
 
-	public String getCouponcode() {
-		return Couponcode;
+	public String getCouponCode() {
+		return couponCode;
 	}
 
-	public void setCouponcode(String couponcode) {
-		Couponcode = couponcode;
+	public void setCouponCode(String couponCode) {
+		this.couponCode = couponCode;
 	}
 
-	public String getCouponExpdate() {
-		return CouponExpdate;
+	public String getExpDate() {
+		return expDate;
 	}
 
-	public void setCouponExpdate(String couponExpdate) {
-		CouponExpdate = couponExpdate;
+	public void setExpDate(String expDate) {
+		this.expDate = expDate;
+	}
+
+	public int getCouponPrice() {
+		return couponPrice;
+	}
+
+	public void setCouponPrice(int couponPrice) {
+		this.couponPrice = couponPrice;
+	}
+
+	public String getCouponDesc() {
+		return couponDesc;
+	}
+
+	public void setCouponDesc(String couponDesc) {
+		this.couponDesc = couponDesc;
 	}
 
 	@Override
 	public String toString() {
-		return "CouponDto [CouponId=" + CouponId + ", Couponcode=" + Couponcode + ", CouponExpdate=" + CouponExpdate
-				+ "]";
+		return "CouponDto [couponId=" + couponId + ", couponCode=" + couponCode + ", expDate=" + expDate
+				+ ", couponPrice=" + couponPrice + ", couponDesc=" + couponDesc + "]";
 	}
 
 }
