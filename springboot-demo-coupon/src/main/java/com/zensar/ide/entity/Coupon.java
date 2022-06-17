@@ -1,4 +1,4 @@
-package com.zensar.ide.entity;
+package com.zensar.springbootdemo.CouponEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
