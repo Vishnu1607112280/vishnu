@@ -1,4 +1,4 @@
-package com.zensar.springbootdemoCouponDto;
+package com.zensar.springbootdemo.CouponDto;
 
 public class CouponDto {
 	private int couponId;
