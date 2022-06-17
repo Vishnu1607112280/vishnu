@@ -1,4 +1,4 @@
-package com.zensar.ide;
+package com.zensar.springbootdemo.CouponService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.zensar.springbootdemoCouponDto.CouponDto;
-import com.zensar.ide.entity.Coupon;
-import com.zensar.ide.repository.CouponRepository;
+import com.zensar.springbootdemo.CouponDto.CouponDto;
+import com.zensar.springbootdemo.CouponEntity.Coupon;
+import com.zensar.springbootdemo.CouponRepository.CouponRepository;
 
 @Service
 public class CouponServiceImpl implements CouponService {
@@ -33,10 +35,14 @@ public class CouponServiceImpl implements CouponService {
 
 	@Override
 	// public List<CouponDto> getCoupons() {
-	public List<CouponDto> getCoupons(int pageNumber, int pageSize) {
+	public List<CouponDto> getCoupons(int pageNumber, int pageSize, String sortBy, Direction dir) {
 		// List<Coupon> listOfCoupons = couponRepository.findAll();
 		// Page<Coupon> findAll = couponRepository.findAll(PageRequest.of(1, 5));
-		Page<Coupon> findAll = couponRepository.findAll(PageRequest.of(pageNumber, pageSize));
+		// Page<Coupon> findAll =
+		// couponRepository.findAll(PageRequest.of(pageNumber,pageSize));
+		// Page<Coupon> findAll =
+		// couponRepository.findAll(PageRequest.of(pageNumber,pageSize,Sort.by(Direction.DESC,"couponCode")));
+		Page<Coupon> findAll = couponRepository.findAll(PageRequest.of(pageNumber, pageSize, dir, sortBy));
 		List<Coupon> content = findAll.getContent();
 		List<CouponDto> listOfCouponDto = new ArrayList<CouponDto>();
 		/*
