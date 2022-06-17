@@ -1,15 +1,16 @@
-package com.zensar.ide;
+package com.zensar.springbootdemo.CouponService;
 
 import java.util.List;
 
-import com.zensar.springbootdemoCouponDto.CouponDto;
-import com.zensar.ide.entity.Coupon;
+import org.springframework.data.domain.Sort.Direction;
+
+import com.zensar.springbootdemo.CouponDto.CouponDto;
 
 public interface CouponService {
 	public CouponDto getCoupon(int CouponId);
 
 	// public List<CouponDto> getCoupons();
-	public List<CouponDto> getCoupons(int pageNumber, int pageSize);
+	public List<CouponDto> getCoupons(int pageNumber, int pageSize, String sortBy, Direction dir);
 
 	public CouponDto insertCoupon(CouponDto couponDto);
 
