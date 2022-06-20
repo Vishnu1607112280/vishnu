@@ -87,10 +87,4 @@ public class ProductServiceImpl implements ProductService {
 		return productDtos;
 	}
 
-	@Override
-	public List<ProductDto> getByProductNameOrderByProductQuantity(String productName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
