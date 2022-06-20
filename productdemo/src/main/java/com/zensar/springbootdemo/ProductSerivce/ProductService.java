@@ -22,6 +22,5 @@ public interface ProductService {
 	public List<ProductDto> getByProductNameAndProductPrice(String productName, int productPrice);
 
 	public List<ProductDto> getByProductNameOrProductPrice(String productName, int productPrice);
-
-	public List<ProductDto> getByProductNameOrderByProductQuantity(String productName);
+	
 }
