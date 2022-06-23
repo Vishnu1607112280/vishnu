@@ -1,4 +1,4 @@
-package com.zensar.springbootdemo.controller;
+package com.zensar.springbootdemo.StudentController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort.Direction;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zensar.springbootdemo.StudentDto.StudentDto;
-import com.zensar.springbootdemo.entity.Student;
-import com.zensar.springbootdemo.service.StudentService;
+import com.zensar.springbootdemo.StudentEntity.Student;
+import com.zensar.springbootdemo.StudentService.StudentService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping(value = "/student-api", produces = { MediaType.APPLICATION_JSON_VALUE,
-		MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE,
-				MediaType.APPLICATION_XML_VALUE })
+@RequestMapping(value = "/student-api")
 public class StudentController {
 	@Autowired
 	private StudentService studentService;
@@ -35,6 +35,8 @@ public class StudentController {
 	}
 
 	// @RequestMapping("/students/{studentId}")
+	@Operation
+
 	@GetMapping(value = "/students/{studentId}")
 	public ResponseEntity<StudentDto> getStudent(@PathVariable("studentId") int studentId) {
 		return new ResponseEntity<StudentDto>(studentService.getStudent(studentId), HttpStatus.OK);
