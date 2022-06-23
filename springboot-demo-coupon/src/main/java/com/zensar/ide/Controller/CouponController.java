@@ -1,4 +1,4 @@
-package com.zensar.ide.CouponController;
+package com.zensar.springbootdemo.CouponController;
 
 import java.util.List;
 
@@ -22,9 +22,11 @@ import com.zensar.springbootdemo.CouponDto.CouponDto;
 import com.zensar.springbootdemo.CouponEntity.Coupon;
 
 @RestController
-@RequestMapping(value = "/coupon-api", produces = { MediaType.APPLICATION_JSON_VALUE,
-		MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE,
-				MediaType.APPLICATION_XML_VALUE })
+/*
+ * @RequestMapping(value = "/coupon-api", produces = {
+ * MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, consumes
+ * = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+ */
 public class CouponController {
 	@Autowired
 	private CouponService couponService;
