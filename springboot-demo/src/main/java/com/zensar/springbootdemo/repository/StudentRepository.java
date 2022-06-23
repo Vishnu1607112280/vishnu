@@ -1,4 +1,4 @@
-package com.zensar.springbootdemo.repository;
+package com.zensar.springbootdemo.StudentRepository;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.zensar.springbootdemo.entity.Student;
+import com.zensar.springbootdemo.StudentEntity.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 
