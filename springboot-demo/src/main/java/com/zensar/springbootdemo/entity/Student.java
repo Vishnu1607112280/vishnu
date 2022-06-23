@@ -1,4 +1,4 @@
-package com.zensar.springbootdemo.entity;
+package com.zensar.springbootdemo.StudentEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
