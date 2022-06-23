@@ -1,4 +1,4 @@
-package com.zensar.springbootdemo.StudentDto;
+ackage com.zensar.springbootdemo.StudentDto;
 
 public class StudentDto {
 	private int studentId;
