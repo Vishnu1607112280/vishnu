@@ -1,11 +1,11 @@
-package com.zensar.springbootdemo.service;
+package com.zensar.springbootdemo.StudentService;
 
 import java.util.List;
 
 import org.springframework.data.domain.Sort.Direction;
 
 import com.zensar.springbootdemo.StudentDto.StudentDto;
-import com.zensar.springbootdemo.entity.Student;
+import com.zensar.springbootdemo.StudentEntity.Student;
 
 public interface StudentService {
 	public StudentDto getStudent(int studentId);
