@@ -1,153 +1,165 @@
-package com.zensar.springbootdemo.CouponService;
+package com.zensar.springbootdemo.StudentService;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-
-import com.zensar.springbootdemo.CouponDto.CouponDto;
-import com.zensar.springbootdemo.CouponEntity.Coupon;
-import com.zensar.springbootdemo.CouponRepository.CouponRepository;
+import com.zensar.springbootdemo.StudentDto.StudentDto;
+import com.zensar.springbootdemo.StudentEntity.Student;
+import com.zensar.springbootdemo.StudentException.NoSuchStudentExistsException;
+import com.zensar.springbootdemo.StudentException.StudentAlreadyExistsException;
+import com.zensar.springbootdemo.StudentRepository.StudentRepository;
+import org.springframework.data.domain.Sort.Direction; // important one
 
 @Service
-public class CouponServiceImpl implements CouponService {
-	@Autowired
-	private CouponRepository couponRepository;
+public class StudentServiceImpl implements StudentService {
 
+	@Autowired
+	private StudentRepository studentRepository;
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public CouponServiceImpl() {
-	}
-
-	@Override
-	public CouponDto getCoupon(int couponId) {
-		Coupon getCoupon = couponRepository.findById(couponId).get();
-		return modelMapper.map(getCoupon, CouponDto.class);
-		// return mapToDto(getCoupon);
-	}
-
-	@Override
-	// public List<CouponDto> getCoupons() {
-	public List<CouponDto> getCoupons(int pageNumber, int pageSize, String sortBy, Direction dir) {
-		// List<Coupon> listOfCoupons = couponRepository.findAll();
-		// Page<Coupon> findAll = couponRepository.findAll(PageRequest.of(1, 5));
-		// Page<Coupon> findAll =
-		// couponRepository.findAll(PageRequest.of(pageNumber,pageSize));
-		// Page<Coupon> findAll =
-		// couponRepository.findAll(PageRequest.of(pageNumber,pageSize,Sort.by(Direction.DESC,"couponCode")));
-		Page<Coupon> findAll = couponRepository.findAll(PageRequest.of(pageNumber, pageSize, dir, sortBy));
-		List<Coupon> content = findAll.getContent();
-		List<CouponDto> listOfCouponDto = new ArrayList<CouponDto>();
-		/*
-		 * for (Coupon coupon : listOfCoupons) {
-		 * //listOfCouponDto.add(mapToDto(coupon));
-		 * listOfCouponDto.add(modelMapper.map(coupon,CouponDto.class)); }
-		 */
-		for (Coupon coupon : content)
-			listOfCouponDto.add(modelMapper.map(coupon, CouponDto.class));
-		return listOfCouponDto;
-	}
-
-	@Override
-	public CouponDto insertCoupon(CouponDto couponDto) {
-		/*
-		 * Coupon coupon = new Coupon(); coupon.setCouponId(couponDto.getCouponId());
-		 * coupon.setCouponCode(couponDto.getCouponCode());
-		 * coupon.setExpDate(couponDto.getExpDate());
-		 * coupon.setCouponPrice(couponDto.getCouponPrice());
-		 * coupon.setCouponDesc(couponDto.getCouponDesc());
-		 */
-		// Coupon coupon = mapToEntity(couponDto);
-		Coupon coupon = modelMapper.map(couponDto, Coupon.class);
-		Coupon insertedCoupon = couponRepository.save(coupon);
-		// return mapToDto(insertedCoupon);
-		return modelMapper.map(insertedCoupon, CouponDto.class);
+	public StudentServiceImpl() {
 
 	}
 
 	@Override
-	public void updateCoupon(int couponId, CouponDto couponDto) {
-		/*
-		 * Coupon coupon = new Coupon(); coupon.setCouponId(couponDto.getCouponId());
-		 * coupon.setCouponCode(couponDto.getCouponCode());
-		 * coupon.setExpDate(couponDto.getExpDate());
-		 * coupon.setCouponPrice(couponDto.getCouponPrice());
-		 * coupon.setCouponDesc(couponDto.getCouponDesc());
-		 */
-		// Coupon coupon = mapToEntity(couponDto);
-		Coupon coupon = modelMapper.map(couponDto, Coupon.class);
-		couponRepository.save(coupon);
+	public StudentDto getStudent(int studentId) {
+		Student getStudent = studentRepository.findById(studentId).orElse(null);
+		if (getStudent == null) {
+			throw new NoSuchStudentExistsException("Student doesn't exists");
+		}
+		// StudentDto dto = mapToDto(getStudent);
+		return modelMapper.map(getStudent, StudentDto.class);
+	}
+
+	@Override
+	public List<StudentDto> getStudents(int pageNumber, int pageSize, String sortBy, Direction dir) {
+		// List<Student> listOfStudents = studentRepository.findAll();
+		// Page<Student> findAll = studentRepository.findAll(PageRequest.of(pageNumber,
+		// pageSize,Sort.by(Direction.DESC,"studentName")));
+		Page<Student> findAll = studentRepository.findAll(PageRequest.of(pageNumber, pageSize, dir, sortBy));
+		List<Student> content = findAll.getContent();
+		List<StudentDto> listOfStudentDto = new ArrayList<StudentDto>();
+		for (Student student : content) {
+			listOfStudentDto.add(modelMapper.map(student, StudentDto.class));
+		}
+		return listOfStudentDto;
+	}
+
+	@Override
+	public StudentDto insertStudent(StudentDto studentDto) {
+		// Student student = mapToEntity(studentDto);
+		Student student = modelMapper.map(studentDto, Student.class);
+		Student getStudent = studentRepository.findById(student.getStudentId()).get();
+		if (getStudent == null) {
+			Student insertedStudent = studentRepository.save(student);
+			// StudentDto maptoDto = mapToDto(insertedStudent);
+			// return maptoDto;
+			return modelMapper.map(insertedStudent, StudentDto.class);
+		} else
+			throw new StudentAlreadyExistsException("Student already exists");
 
 	}
 
 	@Override
-	public void deleteCoupon(int couponId) {
-		couponRepository.deleteById(couponId);
+	public void deleteStudent(int studentId) {
+		Student getStudent = studentRepository.findById(studentId).orElse(null);
+		if (getStudent == null) {
+			throw new NoSuchStudentExistsException("Student doesnt exists");
+		}
+		studentRepository.deleteById(studentId);
 
 	}
 
 	@Override
-	public List<CouponDto> getByCouponCode(String couponCode) {
-		// List<Coupon> findBycouponCode =
-		// couponRepository.findByCouponCode(couponCode);
-		List<Coupon> findBycouponCode = couponRepository.test(couponCode);
-		List<CouponDto> couponDtos = new ArrayList<CouponDto>();
-		for (Coupon coupon : findBycouponCode)
-			couponDtos.add(modelMapper.map(coupon, CouponDto.class));
-		return couponDtos;
+	public StudentDto updateStudent(int studentId, StudentDto studentDto) {
+		// Student student = mapToEntity(studentDto);
+		Student getStudent = studentRepository.findById(studentId).orElse(null);
+		if (getStudent == null) {
+			throw new NoSuchStudentExistsException("Student doesnt exists");
+		}
+		Student student = modelMapper.map(studentDto, Student.class);
+		Student updatedStudent = studentRepository.save(student);
+		// StudentDto dto = mapToDto(updatedStudent);
+		// return dto;
+		return modelMapper.map(updatedStudent, StudentDto.class);
+	}
+
+	public List<StudentDto> getByStudentName(String studentName) {
+		// return studentRepository.findByStudentName(studentName);
+		// return studentRepository.test(studentName);
+		List<StudentDto> listOfStudentDto = new ArrayList<StudentDto>();
+		List<Student> students = studentRepository.test(studentName);
+		for (Student student : students) {
+			listOfStudentDto.add(modelMapper.map(student, StudentDto.class));
+		}
+		return listOfStudentDto;
 	}
 
 	@Override
-	public List<CouponDto> getByCouponCodeOrCouponPrice(String couponCode, int price) {
-		List<Coupon> findBycouponCode = couponRepository.findByCouponCodeOrCouponPrice(couponCode, price);
-		List<CouponDto> couponDtos = new ArrayList<CouponDto>();
-		for (Coupon coupon : findBycouponCode)
-			couponDtos.add(modelMapper.map(coupon, CouponDto.class));
-		return couponDtos;
+	public List<StudentDto> getByStudentNameAndStudentAge(String studentName, int age) {
+//		return studentRepository.findByStudentNameAndStudentAge(studentName,age); 		
+//		return studentRepository.test1(studentName, age); 
+		List<StudentDto> listOfStudentDto = new ArrayList<StudentDto>();
+		List<Student> students = studentRepository.test1(studentName, age);
+		for (Student student : students) {
+			listOfStudentDto.add(modelMapper.map(student, StudentDto.class));
+		}
+		return listOfStudentDto;
 	}
 
 	@Override
-	public List<CouponDto> getByCouponCodeAndExpDate(String couponCode, String expDate) {
-		// List<Coupon> findBycouponCode =
-		// couponRepository.findByCouponCodeAndExpDate(couponCode, expDate);
-		List<Coupon> findBycouponCode = couponRepository.test1(couponCode, expDate);
-		List<CouponDto> couponDtos = new ArrayList<CouponDto>();
-		for (Coupon coupon : findBycouponCode)
-			couponDtos.add(modelMapper.map(coupon, CouponDto.class));
-		return couponDtos;
+	public List<StudentDto> getByStudentNameOrStudentAge(String studentName, int age) {
+		// TODO Auto-generated method stub
+		// return studentRepository.findByStudentNameOrStudentAge(studentName, age);
+		List<StudentDto> listOfStudentDto = new ArrayList<StudentDto>();
+		List<Student> students = studentRepository.findByStudentNameOrStudentAge(studentName, age);
+		for (Student student : students) {
+			listOfStudentDto.add(modelMapper.map(student, StudentDto.class));
+		}
+		return listOfStudentDto;
 	}
 
 	@Override
-	public List<CouponDto> getByCouponCodeOrderByCouponPrice(String couponCode) {
-		List<Coupon> findBycouponCode = couponRepository.findByCouponCodeOrderByCouponPrice(couponCode);
-		List<CouponDto> couponDtos = new ArrayList<CouponDto>();
-		for (Coupon coupon : findBycouponCode)
-			couponDtos.add(modelMapper.map(coupon, CouponDto.class));
-		return couponDtos;
+	public List<StudentDto> getByStudentNameEndsWith(String suffix) {
+		// return studentRepository.findByStudentNameEndsWith(suffix);
+		List<StudentDto> listOfStudentDto = new ArrayList<StudentDto>();
+		List<Student> students = studentRepository.findByStudentNameEndsWith(suffix);
+		for (Student student : students) {
+			listOfStudentDto.add(modelMapper.map(student, StudentDto.class));
+		}
+		return listOfStudentDto;
+	}
+
+	@Override
+	public List<StudentDto> findByStudentNameOrderBy(String studentName) {
+
+		// return studentRepository.findByStudentNameOrderByStudentIdDesc(studentName);
+		List<StudentDto> listOfStudentDto = new ArrayList<StudentDto>();
+		List<Student> students = studentRepository.findByStudentNameOrderByStudentIdDesc(studentName);
+		for (Student student : students) {
+			listOfStudentDto.add(modelMapper.map(student, StudentDto.class));
+		}
+		return listOfStudentDto;
 	}
 
 	/*
-	 * public Coupon mapToEntity(CouponDto couponDto) { Coupon coupon = new
-	 * Coupon(); coupon.setCouponId(couponDto.getCouponId());
-	 * coupon.setCouponCode(couponDto.getCouponCode());
-	 * coupon.setExpDate(couponDto.getExpDate());
-	 * coupon.setCouponPrice(couponDto.getCouponPrice());
-	 * coupon.setCouponDesc(couponDto.getCouponDesc()); return coupon; }
-	 */
-	/*
-	 * public CouponDto mapToDto(Coupon coupon) { CouponDto couponDto = new
-	 * CouponDto(); couponDto.setCouponId(coupon.getCouponId());
-	 * couponDto.setCouponCode(coupon.getCouponCode());
-	 * couponDto.setExpDate(coupon.getExpDate());
-	 * couponDto.setCouponPrice(coupon.getCouponPrice());
-	 * couponDto.setCouponDesc(coupon.getCouponDesc()); return couponDto; }
+	 * public Student mapToEntity(StudentDto studentDto) { Student student = new
+	 * Student(); student.setStudentId(studentDto.getStudentId());
+	 * student.setStudentName(studentDto.getStudentName());
+	 * student.setStudentAge(studentDto.getStudentAge()); return student; }
+	 * 
+	 * public StudentDto mapToDto(Student student) { StudentDto dto = new
+	 * StudentDto(); dto.setStudentId(student.getStudentId());
+	 * dto.setStudentName(student.getStudentName());
+	 * dto.setStudentAge(student.getStudentAge()); return dto;
+	 * 
+	 * }
 	 */
 
 }
