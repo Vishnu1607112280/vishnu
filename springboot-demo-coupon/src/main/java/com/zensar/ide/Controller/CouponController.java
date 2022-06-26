@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zensar.springbootdemo.CouponService.CouponService;
 import com.zensar.springbootdemo.CouponDto.CouponDto;
 import com.zensar.springbootdemo.CouponEntity.Coupon;
+import com.zensar.springbootdemo.CouponService.CouponService;
 
 @RestController
 /*
