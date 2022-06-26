@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort.Direction;
 import com.zensar.springbootdemo.ProductDto.ProductDto;
 import com.zensar.springbootdemo.ProductEntity.Product;
+import com.zensar.springbootdemo.ProductException.NoSuchProductExistsException;
+import com.zensar.springbootdemo.ProductException.ProductAlreadyExistsException;
 import com.zensar.springbootdemo.ProductRepository.ProductRepository;
 
 @Service
@@ -23,7 +25,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductDto getProduct(int productId) {
-		Product product = productRepository.findById(productId).get();
+		Product product = productRepository.findById(productId).orElse(null);
+		if (product == null) {
+			throw new NoSuchProductExistsException("Product doesn't exists");
+		}
 		return modelMapper.map(product, ProductDto.class);
 	}
 
@@ -42,17 +47,30 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductDto insert(ProductDto productDto) {
-		productRepository.save(modelMapper.map(productDto, Product.class));
-		return productDto;
+		Product product = modelMapper.map(productDto, Product.class);
+		Product getProduct = productRepository.findById(product.getProductId()).orElse(null);
+		if (getProduct == null) {
+			productRepository.save(modelMapper.map(productDto, Product.class));
+			return productDto;
+		} else {
+			throw new ProductAlreadyExistsException("Product already exists");
+		}
+
 	}
 
 	@Override
 	public void update(int productId, ProductDto productDto) {
+		Product getProduct = productRepository.findById(productId).orElse(null);
+		if (getProduct == null)
+			throw new NoSuchProductExistsException("Product doesn't exists to update it");
 		productRepository.save(modelMapper.map(productDto, Product.class));
 	}
 
 	@Override
 	public void delete(int productId) {
+		Product getProduct = productRepository.findById(productId).orElse(null);
+		if (getProduct == null)
+			throw new NoSuchProductExistsException("Product doesn't exists to delete it");
 		productRepository.deleteById(productId);
 	}
 
@@ -83,6 +101,15 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> products = productRepository.byNameOrPrice(productName, productPrice);
 		List<ProductDto> productDtos = new ArrayList<ProductDto>();
 		for (Product product : products)
+			productDtos.add(modelMapper.map(product, ProductDto.class));
+		return productDtos;
+	}
+
+	@Override
+	public List<ProductDto> getByProductNameOrderByProductQuantity(String productName) {
+		List<Product> findbyProductName = productRepository.findByProductNameOrderByProductQuantity(productName);
+		List<ProductDto> productDtos = new ArrayList<ProductDto>();
+		for (Product product : findbyProductName)
 			productDtos.add(modelMapper.map(product, ProductDto.class));
 		return productDtos;
 	}
