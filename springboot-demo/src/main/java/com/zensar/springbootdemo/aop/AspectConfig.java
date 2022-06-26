@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
-import com.zensar.springbootdemo.ProductException.NoSuchProductExistsException;
-import com.zensar.springbootdemo.ProductException.ProductAlreadyExistsException;
+import com.zensar.springbootdemo.StudentException.NoSuchProductExistsException;
+import com.zensar.springbootdemo.StudentException.ProductAlreadyExistsException;
 
 @Aspect
 @Configuration
